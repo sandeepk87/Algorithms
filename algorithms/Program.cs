@@ -28,11 +28,11 @@ namespace algorithms
 
         }
 
-        public node LinkedListnode {
-            get;
-            set;
+        public class LinkedListnode<T>
+        {
+            public T  value { get; set; }
+            public LinkedListNode<T> next { get; set; }
         }
-       
  
         public void AddtoHead(node Node)
         {
@@ -53,7 +53,7 @@ namespace algorithms
         public IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
 
-            node current = Head;
+            LinkedListNode<T> current = Head;
             while (current.value != null)
             {
                 yield return current.value;
