@@ -30,7 +30,7 @@ namespace algorithms
 
     public class LinkedList<T>:ICollection<T>{
 
-       
+
 
         public LinkedListNode<T> Head {
             get;
@@ -77,7 +77,10 @@ namespace algorithms
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            if (Count > 0)
+            {
+                
+            }   
         }
 
         public bool Contains(T item)
@@ -87,7 +90,17 @@ namespace algorithms
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            throw new NotImplementedException();
+            if(Count>0)
+            {
+                LinkedListNode<T> current = Head;
+                while (current != null)
+                {
+                    array[arrayIndex] = current.Value;
+                    arrayIndex++;
+                    current = current.Next;
+                }
+
+            }
         }
 
          IEnumerator<T> IEnumerable<T>.GetEnumerator()
@@ -110,11 +123,7 @@ namespace algorithms
 
         
 
-        public bool Remove(T item)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         void ICollection<T>.Add(T item)
         {
             AddtoHead(new LinkedListNode<T>(item));
@@ -170,25 +179,38 @@ namespace algorithms
                 }
             }
         }
-    }
 
-    public class LinkedListOps
-    {
-
-        public void Addtolinkedlist(node node) {
-
-            Console.WriteLine("Add to Head or Tail type H or T");
-            var x = Console.ReadLine();
-            if (x == "H")
+        public bool Remove(T item)
+        {
+            LinkedListNode<T> Current = Head;
+            LinkedListNode<T> Next ;
+          
+            
+            while (Current != null)
             {
-                //add to Head
+                
+                Next = Current.Next;
+                if (Current.Value.Equals(item))
+                {
+                    
+                    if (Current == Head)
+                        Head = Current.Next;
 
-              
+                    Current = null ;
+                    Count--;
+                }
+                Current = Next;
             }
+            return true;
         }
+        
+
+
+    }
 
     
-    }
+
+    
 
      
     class Program
@@ -201,7 +223,11 @@ namespace algorithms
 
 
             LinkedList<int> vs = new LinkedList<int>();
-           
+            vs.Add(3);
+            vs.Add(4);
+            vs.Add(6);
+            vs.Remove(4);
+            Console.ReadLine();
 
         }
     }
