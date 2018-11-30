@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+
 namespace algorithms
 {
 
@@ -61,10 +63,19 @@ namespace algorithms
 
         public void AddtoHead(LinkedListNode<T> linkedListnode)
         {
-
+            
             LinkedListNode<T> CurrentNode = Head;
             Head = linkedListnode;
             Head.Next = CurrentNode;
+            if (CurrentNode==null)
+            {
+                Tail=Head;
+            }
+            else if (CurrentNode.Next==null)
+            {
+                Tail = CurrentNode;
+
+            }
             Count++;
         }
         public void AddtoTail(LinkedListNode<T> linkedListNode)
@@ -79,7 +90,9 @@ namespace algorithms
         {
             if (Count > 0)
             {
-                
+                Head = null;
+                Tail = null;
+                Count = 0;
             }   
         }
 
@@ -184,7 +197,7 @@ namespace algorithms
         {
             LinkedListNode<T> Current = Head;
             LinkedListNode<T> Next ;
-          
+            LinkedListNode<T> Previous = null;
             
             while (Current != null)
             {
@@ -192,13 +205,21 @@ namespace algorithms
                 Next = Current.Next;
                 if (Current.Value.Equals(item))
                 {
-                    
-                    if (Current == Head)
-                        Head = Current.Next;
 
-                    Current = null ;
+                    if (Current == Head)
+                    {
+                        Head = Current.Next;
+                      
+
+                    }
+
+                    Previous = Next;
                     Count--;
                 }
+
+                if (Current.Next==null)
+                    Tail = Current;
+
                 Current = Next;
             }
             return true;
