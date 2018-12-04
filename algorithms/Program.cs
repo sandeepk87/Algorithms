@@ -126,7 +126,7 @@ namespace algorithms
             }
             else
             { 
-            while (current.Next != null)
+            while (current != null)
             {
                 yield return current.Value;
                 current = current.Next;
@@ -184,7 +184,7 @@ namespace algorithms
                 yield return Head.Value;
             else
             {
-                while (current.Next!=null)
+                while (current!=null)
                 {
                     yield return current.Value;
                     current = current.Next;
@@ -196,31 +196,51 @@ namespace algorithms
         public bool Remove(T item)
         {
             LinkedListNode<T> Current = Head;
-            LinkedListNode<T> Next ;
-            LinkedListNode<T> Previous = null;
+            //LinkedListNode<T> Next ;
+            LinkedListNode<T> Previous=null;
             
             while (Current != null)
             {
                 
-                Next = Current.Next;
+
                 if (Current.Value.Equals(item))
                 {
 
                     if (Current == Head)
                     {
                         Head = Current.Next;
-                      
-
+                        Count--;
+                        break;
                     }
 
-                    Previous = Next;
+                    else
+                    
+                    //previous item should be pointing to current.next
+                    Previous.Next = Current.Next;
+
+                    if (Current.Next == null)
+                    { 
+                        Tail = Previous;
+                    }
+                    Current.Next = null;
+                    Current.Value = default(T);
+                    
                     Count--;
+                    break;
+                }
+                else
+                {
+                    Previous = Current;
                 }
 
-                if (Current.Next==null)
-                    Tail = Current;
+                //make previous item as current as current is going to point next item
+                             
 
-                Current = Next;
+
+                //point current to next
+                Current = Previous.Next;
+
+
             }
             return true;
         }
@@ -229,11 +249,146 @@ namespace algorithms
 
     }
 
-    
+    public class DoublyLinkedListNode<T> {
 
-    
+       public T Value { get; set; }
+        public DoublyLinkedListNode(T value)
+        {
+            this.Value = value;
+        }
 
-     
+        public DoublyLinkedListNode<T> Previous { get;  set; }
+        public DoublyLinkedListNode<T> Next { get;  set; }
+
+        }
+
+    public class DoublyLinkedList<T> :IEnumerable<T>,ICollection<T>
+    {
+        public int Count { get; private set; }
+
+        public DoublyLinkedListNode<T> Head { get; private set; }
+        public DoublyLinkedListNode<T> Tail { get; private set; }
+        public bool IsReadOnly { get { return false; } }
+
+        public void Add(T item)
+        {
+            AddToHead(new DoublyLinkedListNode<T>(item));
+        }
+
+        public void AddToHead(DoublyLinkedListNode<T> doublyLinkedListNode)
+        {
+            if (Count == 0)
+            {
+                Head = doublyLinkedListNode;
+                Tail = Head;
+            }
+
+            else {
+                DoublyLinkedListNode<T> Current = Head;
+                Head = doublyLinkedListNode;
+                Head.Previous = null;
+                Head.Next = Current;
+                Current.Previous = Head;
+            }
+           
+            Count++;
+            
+        }
+
+        public void Clear()
+        {
+
+            if (Count > 0)
+            {
+                DoublyLinkedListNode<T> Current = Head.Next;
+                Head = null;
+                Head.Next = null;
+                Tail = null;
+                Tail.Previous = null;
+                while (Current.Next != null)
+                {
+                  
+                    Current.Previous = null;
+
+                    Current = Current.Next;
+                    
+                }
+                Count = 0;
+            }
+        }
+
+        public bool Contains(T item)
+        {
+            var v = new DoublyLinkedListNode<T>(item);
+            DoublyLinkedListNode<T> Current = Head;
+
+            while (Current != null)
+            {
+                if (Current == v)
+                    return true;
+                Current = Current.Next;
+
+            }
+            return false;
+        }
+
+        public void CopyTo(Array array, int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Remove(T item)
+        {
+            if (Count > 0)
+            {
+                DoublyLinkedListNode<T> current = Head;
+                DoublyLinkedListNode<T> previous = null;
+                while (current != null)
+                {
+                    if (current.Value.Equals(item))
+                    {
+                        if (current.Previous == null)
+                        {
+                            Head = Head.Next;
+                            Head.Previous = null;
+
+                        }
+                        else
+                        {
+                            current.Previous.Next = current.Next;
+                            current.Next.Previous = current.Previous;
+                            current.Next = null;
+                            current.Previous = null;
+                            
+                        }
+
+                    }
+                    current = current.Next;
+                }
+            }
+            return false;
+        }
+
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+
+
     class Program
     {
         static void Main(string[] args)
@@ -247,7 +402,18 @@ namespace algorithms
             vs.Add(3);
             vs.Add(4);
             vs.Add(6);
-            vs.Remove(4);
+            vs.Add(7);
+            foreach (var i in vs)
+            {
+                Console.WriteLine(i);
+            }
+            vs.Remove(7);
+
+            DoublyLinkedList<int> ds = new DoublyLinkedList<int>();
+            ds.Add(1);
+            ds.Add(4);
+            ds.Add(5);
+            ds.Remove(4);
             Console.ReadLine();
 
         }
