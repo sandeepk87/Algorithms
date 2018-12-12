@@ -6,14 +6,14 @@ using System.Globalization;
 namespace algorithms
 {
 
-    public  class node
+    public class node
     {
-        public  Object value { get
-                
-                ; set
-                
-                ; }
-      public   node next { get; set; }
+        public Object value { get
+
+               ; set
+
+               ; }
+        public node next { get; set; }
     }
 
     public class LinkedListNode<T>
@@ -26,24 +26,24 @@ namespace algorithms
         public T Value { get; set; }
         public LinkedListNode<T> Next { get; set; }
 
-       
+
     }
 
 
-    public class LinkedList<T>:ICollection<T>{
+    public class LinkedList<T> : ICollection<T> {
 
 
 
         public LinkedListNode<T> Head {
             get;
 
-          private  set;
+            private set;
         }
 
         public LinkedListNode<T> Tail {
             get;
 
-           private set;
+            private set;
 
         }
 
@@ -63,15 +63,15 @@ namespace algorithms
 
         public void AddtoHead(LinkedListNode<T> linkedListnode)
         {
-            
+
             LinkedListNode<T> CurrentNode = Head;
             Head = linkedListnode;
             Head.Next = CurrentNode;
-            if (CurrentNode==null)
+            if (CurrentNode == null)
             {
-                Tail=Head;
+                Tail = Head;
             }
-            else if (CurrentNode.Next==null)
+            else if (CurrentNode.Next == null)
             {
                 Tail = CurrentNode;
 
@@ -84,7 +84,7 @@ namespace algorithms
             Tail = linkedListNode;
             Tail.Next = null;
             Count++;
-         }
+        }
 
         public void Clear()
         {
@@ -93,7 +93,7 @@ namespace algorithms
                 Head = null;
                 Tail = null;
                 Count = 0;
-            }   
+            }
         }
 
         public bool Contains(T item)
@@ -103,7 +103,7 @@ namespace algorithms
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            if(Count>0)
+            if (Count > 0)
             {
                 LinkedListNode<T> current = Head;
                 while (current != null)
@@ -116,27 +116,27 @@ namespace algorithms
             }
         }
 
-         IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            
+
             LinkedListNode<T> current = Head;
             if (Count == 0)
             {
                 yield return current.Value;
             }
             else
-            { 
-            while (current != null)
             {
-                yield return current.Value;
-                current = current.Next;
-            }
+                while (current != null)
+                {
+                    yield return current.Value;
+                    current = current.Next;
+                }
             }
         }
 
-        
 
-        
+
+
         void ICollection<T>.Add(T item)
         {
             AddtoHead(new LinkedListNode<T>(item));
@@ -184,7 +184,7 @@ namespace algorithms
                 yield return Head.Value;
             else
             {
-                while (current!=null)
+                while (current != null)
                 {
                     yield return current.Value;
                     current = current.Next;
@@ -197,11 +197,11 @@ namespace algorithms
         {
             LinkedListNode<T> Current = Head;
             //LinkedListNode<T> Next ;
-            LinkedListNode<T> Previous=null;
-            
+            LinkedListNode<T> Previous = null;
+
             while (Current != null)
             {
-                
+
 
                 if (Current.Value.Equals(item))
                 {
@@ -214,17 +214,17 @@ namespace algorithms
                     }
 
                     else
-                    
-                    //previous item should be pointing to current.next
-                    Previous.Next = Current.Next;
+
+                        //previous item should be pointing to current.next
+                        Previous.Next = Current.Next;
 
                     if (Current.Next == null)
-                    { 
+                    {
                         Tail = Previous;
                     }
                     Current.Next = null;
                     Current.Value = default(T);
-                    
+
                     Count--;
                     break;
                 }
@@ -234,7 +234,7 @@ namespace algorithms
                 }
 
                 //make previous item as current as current is going to point next item
-                             
+
 
 
                 //point current to next
@@ -244,25 +244,25 @@ namespace algorithms
             }
             return true;
         }
-        
+
 
 
     }
 
     public class DoublyLinkedListNode<T> {
 
-       public T Value { get; set; }
+        public T Value { get; set; }
         public DoublyLinkedListNode(T value)
         {
             this.Value = value;
         }
 
-        public DoublyLinkedListNode<T> Previous { get;  set; }
-        public DoublyLinkedListNode<T> Next { get;  set; }
+        public DoublyLinkedListNode<T> Previous { get; set; }
+        public DoublyLinkedListNode<T> Next { get; set; }
 
-        }
+    }
 
-    public class DoublyLinkedList<T> :IEnumerable<T>,ICollection<T>
+    public class DoublyLinkedList<T> : IEnumerable<T>, ICollection<T>
     {
         public int Count { get; private set; }
 
@@ -290,9 +290,9 @@ namespace algorithms
                 Head.Next = Current;
                 Current.Previous = Head;
             }
-           
+
             Count++;
-            
+
         }
 
         public void Clear()
@@ -307,11 +307,11 @@ namespace algorithms
                 Tail.Previous = null;
                 while (Current.Next != null)
                 {
-                  
+
                     Current.Previous = null;
 
                     Current = Current.Next;
-                    
+
                 }
                 Count = 0;
             }
@@ -369,7 +369,7 @@ namespace algorithms
                             current.Next.Previous = current.Previous;
                             current.Next = null;
                             current.Previous = null;
-                            
+
                         }
 
                     }
@@ -387,7 +387,76 @@ namespace algorithms
     }
 
 
+    public class Stack_LinkedList<T> : IEnumerable<T>
+    {
+        //pop, peek and clear,push
 
+        private System.Collections.Generic.LinkedList<T> items = new System.Collections.Generic.LinkedList<T>();
+
+        int Count { get { return items.Count; } }
+
+        public void push(T item)
+        {
+            items.AddFirst(item);
+        }
+
+      public  T pop() {
+
+            T value = items.First.Value;
+            items.RemoveFirst();
+            return value;
+        }
+        public T Peek() {
+            return items.First.Value;
+        }
+        public IEnumerator<T> GetEnumerator()
+        {
+            return items.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return items.GetEnumerator();
+        }
+    }
+
+    public class Stack_Array<T> : IEnumerable<T>
+    {
+
+        private T[] items = new T[0];
+        int size;
+public        void Push(T item)
+        {   
+            size = items.Length;
+            
+            T[] newArray = new T[size+1];
+            items.CopyTo(newArray, 0);
+            size++;
+            newArray[size - 1] = item;
+            items = newArray;
+
+
+        }
+      public     void Pop()
+        {
+            size = items.Length;
+            var removeditem = items[size];
+        }
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            size = items.Length;
+
+            for (int i = 0; i < size; i++)
+            {
+                yield return items[i];
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return items.GetEnumerator();
+        }
+    }
 
     class Program
     {
@@ -414,7 +483,25 @@ namespace algorithms
             ds.Add(4);
             ds.Add(5);
             ds.Remove(4);
-            Console.ReadLine();
+           
+
+            Stack_Array<int> st = new Stack_Array<int>();
+            st.Push(1);
+            st.Push(5);
+            st.Push(2);
+
+            
+            Stack_LinkedList<int> ts = new Stack_LinkedList<int>();
+            ts.push(3);
+            ts.push(4);
+            ts.push(2);
+
+            Stack<int> sts = new Stack<int>();
+            sts.Push(4);
+            sts.Push(2);
+            sts.Push(3);
+            sts.Pop();
+
 
         }
     }
