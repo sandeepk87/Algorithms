@@ -2,17 +2,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.InteropServices;
 
 namespace algorithms
 {
 
+
+
+
     public class node
     {
-        public Object value { get
+        public Object value
+        {
+            get
 
-               ; set
+; set
 
-               ; }
+;
+        }
         public node next { get; set; }
     }
 
@@ -30,17 +37,20 @@ namespace algorithms
     }
 
 
-    public class LinkedList<T> : ICollection<T> {
+    public class LinkedList<T> : ICollection<T>
+    {
 
 
 
-        public LinkedListNode<T> Head {
+        public LinkedListNode<T> Head
+        {
             get;
 
             private set;
         }
 
-        public LinkedListNode<T> Tail {
+        public LinkedListNode<T> Tail
+        {
             get;
 
             private set;
@@ -49,8 +59,11 @@ namespace algorithms
 
         public int Count { get; private set; }
 
-        public bool IsReadOnly { get
-            { return false; } }
+        public bool IsReadOnly
+        {
+            get
+            { return false; }
+        }
 
         int ICollection<T>.Count { get; }
 
@@ -249,7 +262,8 @@ namespace algorithms
 
     }
 
-    public class DoublyLinkedListNode<T> {
+    public class DoublyLinkedListNode<T>
+    {
 
         public T Value { get; set; }
         public DoublyLinkedListNode(T value)
@@ -283,7 +297,8 @@ namespace algorithms
                 Tail = Head;
             }
 
-            else {
+            else
+            {
                 DoublyLinkedListNode<T> Current = Head;
                 Head = doublyLinkedListNode;
                 Head.Previous = null;
@@ -400,13 +415,15 @@ namespace algorithms
             items.AddFirst(item);
         }
 
-      public  T pop() {
+        public T pop()
+        {
 
             T value = items.First.Value;
             items.RemoveFirst();
             return value;
         }
-        public T Peek() {
+        public T Peek()
+        {
             return items.First.Value;
         }
         public IEnumerator<T> GetEnumerator()
@@ -425,23 +442,40 @@ namespace algorithms
 
         private T[] items = new T[0];
         int size;
-public        void Push(T item)
-        {   
-            size = items.Length;
-            
-            T[] newArray = new T[size+1];
-            items.CopyTo(newArray, 0);
-            size++;
-            newArray[size - 1] = item;
-            items = newArray;
-
-
-        }
-      public     void Pop()
+        public void Push(T item)
         {
-            size = items.Length;
-            var removeditem = items[size];
+            //size=items.length means array items has reached upperbound limit
+            if (size == items.Length)
+            {
+                int newlength = size == 0 ? 4 : size * 2;
+                //initial length =4 otherwise double the existing length
+                T[] newArray = new T[newlength];
+                items.CopyTo(newArray, 0);
+
+
+                items = newArray;
+            }
+
+            items[size] = item;
+            size++;
+
         }
+        public T Pop()
+        {
+            // size = items.Length;
+            var removeditem = items[size - 1];
+
+            items[size - 1] = default(T);
+            size--;
+            return removeditem;
+        }
+
+        public T Peek()
+        {
+
+            return items[size - 1];
+        }
+
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
             size = items.Length;
@@ -458,49 +492,161 @@ public        void Push(T item)
         }
     }
 
+
+    public class Queue_linkedlist<T>
+    {
+        private System.Collections.Generic.LinkedList<T> values = new System.Collections.Generic.LinkedList<T>();
+        public void Enqueue(T item)
+        {
+            values.AddLast(item);
+        }
+        public T Dequeue()
+        {
+            var firstitem = values.First;
+            values.RemoveFirst();
+            return firstitem.Value;
+        }
+
+    }
+
+    public class Queue_array<T>
+    {
+        private T[] items = new T[0];
+
+        int _size = 0;
+
+        int _head=0;//first one
+        int _tail=-1;//newest one
+
+
+        public void Enqueue(T item)
+        {
+
+
+            if (_size == items.Length)
+            {
+                int newlength = _size == 0 ? 4 : _size * 2;
+                T[] newArray = new T[newlength];
+
+                if (_tail > _head)
+                {
+
+
+                    int targetindex = 0;
+                    //copy head to tail to newarray
+                    for (targetindex = _head; targetindex <=_tail; targetindex++)
+                    {
+                        newArray[targetindex] = items[targetindex];
+                    }
+
+
+                }
+                else
+                {
+                    int targetindex = 0;
+                    //copy head to items end to new array
+                    for (int i  = _head; i<items.Length; i++)
+                    {
+                        newArray[targetindex] = items[i];
+                        targetindex++;
+                    }
+                    //copy start of items to tail to new array
+                    for(int i=0;i<=_tail;i++)
+                    {
+                        newArray[targetindex] = items[i];
+                        targetindex++;
+                    }
+
+                    _head = 0;
+                    _tail = items.Length-1;
+                    items = newArray;
+
+                }
+
+
+                _head = 0;
+                _tail = items.Length - 1;
+                items = newArray;
+
+
+            }
+            //items = _size == 0 ? new T[4] : new T[_size * 2];
+            if (_tail == items.Length - 1)
+                _tail = 0;
+            else
+                _tail++;
+            items[_tail] = item;
+           
+            _size++;
+        }
+        public T DeQueue()
+        {
+            
+            var ditem = items[_head];
+            items[_head] = default(T);
+            _size--;
+            _head++;
+            return ditem;
+
+        }
+         
+    }
+
+    
+
     class Program
     {
+        
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-
-
-
-
-            LinkedList<int> vs = new LinkedList<int>();
-            vs.Add(3);
-            vs.Add(4);
-            vs.Add(6);
-            vs.Add(7);
-            foreach (var i in vs)
-            {
-                Console.WriteLine(i);
-            }
-            vs.Remove(7);
-
-            DoublyLinkedList<int> ds = new DoublyLinkedList<int>();
-            ds.Add(1);
-            ds.Add(4);
-            ds.Add(5);
-            ds.Remove(4);
-           
-
-            Stack_Array<int> st = new Stack_Array<int>();
-            st.Push(1);
-            st.Push(5);
-            st.Push(2);
-
             
-            Stack_LinkedList<int> ts = new Stack_LinkedList<int>();
-            ts.push(3);
-            ts.push(4);
-            ts.push(2);
+            Queue_array<int> testqueue = new Queue_array<int>();
+            testqueue.Enqueue(4);
+            testqueue.Enqueue(7);
+            testqueue.Enqueue(9);
+            testqueue.Enqueue(10);
+            testqueue.Enqueue(11);
 
-            Stack<int> sts = new Stack<int>();
-            sts.Push(4);
-            sts.Push(2);
-            sts.Push(3);
-            sts.Pop();
+            var chk1 = testqueue.DeQueue();
+            var chk2 = testqueue.DeQueue();
+            testqueue.Enqueue(13);
+            testqueue.Enqueue(15);
+            Console.ReadLine();
+            //LinkedList<int> vs = new LinkedList<int>();
+            //vs.Add(3);
+            //vs.Add(4);
+            //vs.Add(6);
+            //vs.Add(7);
+            //foreach (var i in vs)
+            //{
+            //    Console.WriteLine(i);
+            //}
+            //vs.Remove(7);
+
+            //DoublyLinkedList<int> ds = new DoublyLinkedList<int>();
+            //ds.Add(1);
+            //ds.Add(4);
+            //ds.Add(5);
+            //ds.Remove(4);
+
+
+            //Stack_Array<int> st = new Stack_Array<int>();
+            //st.Push(1);
+            //st.Push(5);   
+            //st.Push(2);
+            //st.Pop();
+            //var x=st.Peek();
+
+            //    Stack_LinkedList<int> ts = new Stack_LinkedList<int>();
+            //ts.push(3);
+            //ts.push(4);
+            //ts.push(2);
+
+            //Stack<int> sts = new Stack<int>();
+            //sts.Push(4);
+            //sts.Push(2);
+            //sts.Push(3);
+            //sts.Pop();
 
 
         }
