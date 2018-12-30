@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
@@ -592,6 +593,42 @@ namespace algorithms
          
     }
 
+
+    public class PriorityQueue<T> where T: IComparable<T>
+    {
+
+        private System.Collections.Generic.LinkedList<T> items = new System.Collections.Generic.LinkedList<T>();
+
+        public void Enqueue(T item)
+        {
+            if (items.Count == 0)
+                items.AddLast(item);
+            else
+            {
+                var current = items.First;
+                while (current!=null &&current.Value.CompareTo(item)>0)
+                {
+                    current = current.Next;
+
+                }
+                if (current == null)
+                    //end of list is reached
+                    items.AddLast(item);
+                else
+                    items.AddBefore(current,item);
+            }
+               
+             
+            
+        }
+        public T Dequeue()
+        {
+            var first = items.First;
+            items.RemoveFirst();
+            return first.Value;
+        }
+
+    }
     
 
     class Program
@@ -599,7 +636,15 @@ namespace algorithms
         
         static void Main(string[] args)
         {
-            
+
+            PriorityQueue<int> priorityQueue = new PriorityQueue<int>();
+            priorityQueue.Enqueue(5);
+            priorityQueue.Enqueue(8);
+            priorityQueue.Enqueue(2);
+            priorityQueue.Enqueue(7);
+            var firstval = priorityQueue.Dequeue();
+
+
             Queue_array<int> testqueue = new Queue_array<int>();
             testqueue.Enqueue(4);
             testqueue.Enqueue(7);
