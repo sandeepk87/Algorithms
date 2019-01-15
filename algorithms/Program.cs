@@ -671,9 +671,9 @@ namespace algorithms
 
     public class sanlookup
     {
-        private KeyValuePair<string,string> keyValuePairs;
+       // private KeyValuePair<string,string> keyValuePairs;
         private Dictionary<string, HashSet<KeyValuePair<string, string>>> data;
-        private HashSet<KeyValuePair<string,string>> keys;
+       // private HashSet<KeyValuePair<string,string>> keys;
 
         public sanlookup()
         {
@@ -688,6 +688,7 @@ namespace algorithms
 
                 x.Add(new KeyValuePair<string, string>(valuePair.Key, valuePair.Value));
                 data.Add(key, x);
+                x = null;
             }
             else
             {
@@ -698,7 +699,13 @@ namespace algorithms
             
         }
 
-        
+        public HashSet<KeyValuePair<string,string>> this [string key]
+        {
+            get { return data[key]; }
+          
+        }
+
+       
     }
 
     class Program
@@ -723,7 +730,7 @@ namespace algorithms
             {
                 _sanlookup.Add(x["name"].ToString(), new KeyValuePair<string, string>(x["value"].ToString(), x["place"].ToString()));
             }
-
+            var f=_sanlookup["san1"];
           HashSet<JObject> tsh = new HashSet<JObject>();
             
             var df = tsh.Values("name");
