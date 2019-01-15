@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace algorithms
 {
@@ -629,13 +632,124 @@ namespace algorithms
         }
 
     }
-    
+
+    public  class Lookup<T,TE> : IEnumerable<T>,IEnumerable<IGrouping<T,TE>>
+        
+    {
+        private IDictionary<T, IGrouping<TE, TE>> m_dict;
+        private IEqualityComparer<T> _comparer;
+        Lookup(IEqualityComparer<T> comparer)
+        {
+            _comparer = comparer;
+            m_dict = new Dictionary<T, IGrouping<TE, TE>>(_comparer);
+        }
+        public IEnumerable<TE> this[T key] => throw new NotImplementedException();
+
+        public int Count => throw new NotImplementedException();
+
+        public bool Contains(T key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerator<IGrouping<T, TE>> IEnumerable<IGrouping<T, TE>>.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+    public class sanlookup
+    {
+        private KeyValuePair<string,string> keyValuePairs;
+        private Dictionary<string, HashSet<KeyValuePair<string, string>>> data;
+        private HashSet<KeyValuePair<string,string>> keys;
+
+        public sanlookup()
+        {
+            data = new Dictionary<string, HashSet<KeyValuePair<string, string>>>();
+        }
+        public void Add(string key,KeyValuePair<string,string> valuePair)
+        {
+            if (data.Keys.Contains(key))
+            {
+                var x = data[key];
+                data.Remove(key);
+
+                x.Add(new KeyValuePair<string, string>(valuePair.Key, valuePair.Value));
+                data.Add(key, x);
+            }
+            else
+            {
+                data.Add(key, new HashSet<KeyValuePair<string, string>>() { valuePair });
+               
+            }
+
+            
+        }
+
+        
+    }
 
     class Program
     {
         
         static void Main(string[] args)
         {
+            string s = "[\r\n{\r\n                name: \"san1\",\r\nvalue: \"dds1\",\r\nplace:\"hyd\"\r\n},\r\n{\r\n                name: \"san1\",\r\nvalue: \"dds2\",\r\nplace:\"ban\"\r\n},\r\n{\r\n                name: \"san3\",\r\nvalue: \"dds3\",\r\nplace:\"bel\"\r\n},\r\n{\r\n                name: \"san4\",\r\nvalue: \"dds4\",\r\nplace:\"mos\"\r\n}]";
+            JArray jArray = JArray.Parse(s);
+
+            HashSet<Dictionary<string, string>> keyValues = new HashSet<Dictionary<string, string>>();
+            keyValues.Add(new Dictionary<string, string>() { { "car", "mercedes" } });
+            keyValues.Add(new Dictionary<string, string>() { { "car", "bmw" } });
+            keyValues.Add(new Dictionary<string, string>() { { "car", "toyota" } });
+            keyValues.Add(new Dictionary<string, string>() { { "plane", "boeing" } });
+            keyValues.Add(new Dictionary<string, string>() { { "plane", "airbus" } });
+            keyValues.Add(new Dictionary<string, string>() { { "bus", "volvo" } });
+
+
+            sanlookup _sanlookup = new sanlookup();
+            foreach (var x in jArray)
+            {
+                _sanlookup.Add(x["name"].ToString(), new KeyValuePair<string, string>(x["value"].ToString(), x["place"].ToString()));
+            }
+
+          HashSet<JObject> tsh = new HashSet<JObject>();
+            
+            var df = tsh.Values("name");
+            var mf=  tsh.GetHashCode();
+            var st = tsh.Values();
+            var arr = df.ToArray();
+
+           
+           // var ds=tsh.Values(JObject.FromObject())
+            int  val = Convert.ToInt32(Console.ReadLine());
+
+         
+            int[] input = new int[2];
+           
+            for(int m=0;m<val;m++)
+            {
+                string valin = Console.ReadLine();
+             string[] vsd=   valin.Split(" ");
+                int N = Convert.ToInt32(vsd[0]);
+                int K = Convert.ToInt32(vsd[1]);
+            }
+               
+            
+
+                
+               
 
             PriorityQueue<int> priorityQueue = new PriorityQueue<int>();
             priorityQueue.Enqueue(5);
