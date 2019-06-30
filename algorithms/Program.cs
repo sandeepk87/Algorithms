@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using System.Diagnostics;
 
 namespace algorithms
 {
@@ -25,6 +26,21 @@ namespace algorithms
 ;
         }
         public node next { get; set; }
+    }
+
+    public class TreeNode<T> : IComparable<T> where T: IComparable<T>
+    {
+        public TreeNode(T value)
+        {
+            Value = value;
+        }
+        public T Value;
+        public TreeNode<T> Left { get; set; }
+        public TreeNode<T> Right { get; set; }
+        public int CompareTo(T other)
+        {
+            return Value.CompareTo(other);
+        }
     }
 
     public class LinkedListNode<T>
@@ -519,8 +535,8 @@ namespace algorithms
 
         int _size = 0;
 
-        int _head=0;//first one
-        int _tail=-1;//newest one
+        int _head = 0;//first one
+        int _tail = -1;//newest one
 
 
         public void Enqueue(T item)
@@ -538,7 +554,7 @@ namespace algorithms
 
                     int targetindex = 0;
                     //copy head to tail to newarray
-                    for (targetindex = _head; targetindex <=_tail; targetindex++)
+                    for (targetindex = _head; targetindex <= _tail; targetindex++)
                     {
                         newArray[targetindex] = items[targetindex];
                     }
@@ -549,20 +565,20 @@ namespace algorithms
                 {
                     int targetindex = 0;
                     //copy head to items end to new array
-                    for (int i  = _head; i<items.Length; i++)
+                    for (int i = _head; i < items.Length; i++)
                     {
                         newArray[targetindex] = items[i];
                         targetindex++;
                     }
                     //copy start of items to tail to new array
-                    for(int i=0;i<=_tail;i++)
+                    for (int i = 0; i <= _tail; i++)
                     {
                         newArray[targetindex] = items[i];
                         targetindex++;
                     }
 
                     _head = 0;
-                    _tail = items.Length-1;
+                    _tail = items.Length - 1;
                     items = newArray;
 
                 }
@@ -580,12 +596,12 @@ namespace algorithms
             else
                 _tail++;
             items[_tail] = item;
-           
+
             _size++;
         }
         public T DeQueue()
         {
-            
+
             var ditem = items[_head];
             items[_head] = default(T);
             _size--;
@@ -593,11 +609,11 @@ namespace algorithms
             return ditem;
 
         }
-         
+
     }
 
 
-    public class PriorityQueue<T> where T: IComparable<T>
+    public class PriorityQueue<T> where T : IComparable<T>
     {
 
         private System.Collections.Generic.LinkedList<T> items = new System.Collections.Generic.LinkedList<T>();
@@ -609,7 +625,7 @@ namespace algorithms
             else
             {
                 var current = items.First;
-                while (current!=null &&current.Value.CompareTo(item)>0)
+                while (current != null && current.Value.CompareTo(item) > 0)
                 {
                     current = current.Next;
 
@@ -618,11 +634,11 @@ namespace algorithms
                     //end of list is reached
                     items.AddLast(item);
                 else
-                    items.AddBefore(current,item);
+                    items.AddBefore(current, item);
             }
-               
-             
-            
+
+
+
         }
         public T Dequeue()
         {
@@ -633,86 +649,255 @@ namespace algorithms
 
     }
 
-    public  class Lookup<T,TE> : IEnumerable<T>,IEnumerable<IGrouping<T,TE>>
-        
-    {
-        private IDictionary<T, IGrouping<TE, TE>> m_dict;
-        private IEqualityComparer<T> _comparer;
-        Lookup(IEqualityComparer<T> comparer)
-        {
-            _comparer = comparer;
-            m_dict = new Dictionary<T, IGrouping<TE, TE>>(_comparer);
-        }
-        public IEnumerable<TE> this[T key] => throw new NotImplementedException();
-
-        public int Count => throw new NotImplementedException();
-
-        public bool Contains(T key)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
-
-        IEnumerator<IGrouping<T, TE>> IEnumerable<IGrouping<T, TE>>.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
 
     public class sanlookup
     {
-       // private KeyValuePair<string,string> keyValuePairs;
-        private Dictionary<string, HashSet<KeyValuePair<string, string>>> data;
-       // private HashSet<KeyValuePair<string,string>> keys;
-
-        public sanlookup()
+        // private KeyValuePair<string,string> keyValuePairs;
+        private static Dictionary<string, List<KeyValuePair<string, string>>> data;
+        // private HashSet<KeyValuePair<string,string>> keys;
+        //  private static string[] keys=new string[0];
+        // private int keycount;
+        static sanlookup()
         {
-            data = new Dictionary<string, HashSet<KeyValuePair<string, string>>>();
+            data = new Dictionary<string, List<KeyValuePair<string, string>>>();
+            // keycount = 0;
         }
-        public void Add(string key,KeyValuePair<string,string> valuePair)
+        public void Add(string key, KeyValuePair<string, string> valuePair)
         {
-            if (data.Keys.Contains(key))
+            if (data.ContainsKey(key))
             {
-                var x = data[key];
-                data.Remove(key);
-
-                x.Add(new KeyValuePair<string, string>(valuePair.Key, valuePair.Value));
-                data.Add(key, x);
-                x = null;
+                data[key].Add(valuePair);
             }
             else
             {
-                data.Add(key, new HashSet<KeyValuePair<string, string>>() { valuePair });
-               
+                //if (keys.Count() == keycount)
+                //{
+                //    int newcount = keycount == 0 ? 4 : keycount * 4;
+                //    string[] newkeys = new string[newcount];
+                //    keys.CopyTo(newkeys, 0);
+                //    keys = newkeys;
+
+                //}
+                //keys[keycount] = key;
+                //keycount++;
+                data.Add(key, new List<KeyValuePair<string, string>>() { valuePair });
+
             }
 
-            
+
         }
 
-        public HashSet<KeyValuePair<string,string>> this [string key]
+        public List<KeyValuePair<string, string>> this[string key]
         {
             get { return data[key]; }
-          
+
         }
 
-       
+
     }
 
+
+    public class BinaryTree<T> where T: IComparable<T>
+    {
+        public int _count;
+
+        public TreeNode<T> Head;
+
+    public void Add(T val)
+        {
+            if (Head == null)
+                Head=new TreeNode<T>(val);
+            else
+            {
+                AddToTree(Head,val);
+
+            }
+            _count++;
+        }
+
+
+       
+        void AddToTree(TreeNode<T> treeNode,T val)
+        {
+            //value less than Node
+            if (val.CompareTo(treeNode.Value) < 0)
+            {
+                //there is no left node ,hence add to left node
+                if (treeNode.Left == null)
+                {
+                    treeNode.Left = new TreeNode<T>(val);
+
+                }
+                    
+                else
+                {
+                    //Add recursively to next left node
+                    AddToTree(treeNode.Left, val);
+                }
+            }
+            else
+            {
+                if (treeNode.Right == null)
+                {
+                    //no right node hence add to rightnode
+                    treeNode.Right = new TreeNode<T>(val);
+                }
+                else
+                {
+                    AddToTree(treeNode.Right, val);
+                }
+            }
+        }
+
+        public bool Contains(T value)
+        {
+            TreeNode<T> ParentTreeNode;
+            return   FindWithParent(value, out ParentTreeNode) != null;
+        }
+
+        private TreeNode<T> FindWithParent(T Value, out TreeNode<T> ParentNode)
+        {
+            TreeNode<T> current = Head;
+            ParentNode = null;
+            while(current != null) {
+                int result = current.CompareTo(Value);
+                if (result > 0)
+                {
+                    ParentNode = current;
+                    current = current.Left;
+                }
+                else if(result <0)
+                {
+                    ParentNode = current;
+                    current = current.Right;
+
+                }
+                else { break; }
+            }
+
+
+
+            return current;
+        }
+
+        public bool Remove(T value)
+        {
+            if (!Contains(value))
+                return false;
+            
+                TreeNode<T> ParentNode = null;
+                TreeNode<T> RemovedNode = FindWithParent(value,out ParentNode);
+
+              //case 1: Removed Node has no right child, means current node is replaced by left node.
+            if(RemovedNode.Right==null)
+            {
+                if (ParentNode == null)
+                {
+                    Head = RemovedNode.Left;
+            
+                }
+               
+                else
+                {
+                    int result = ParentNode.CompareTo(RemovedNode.Value);
+                    if (result > 0)
+                    {
+                        ParentNode.Left = RemovedNode.Left;
+                    }
+                    else
+                    {
+                        ParentNode.Right = RemovedNode.Left;
+                    }
+                  
+                }
+            }
+            //case 2: RemovedNodes'right node has no left child, then removednode's right child replaces removednode.
+            if (RemovedNode.Right.Left == null)
+            {
+                RemovedNode.Right.Left = RemovedNode.Left;
+
+                if (ParentNode == null)
+                {
+                    Head = RemovedNode.Right;
+                  
+                }
+
+                else
+                {
+                    int result = ParentNode.CompareTo(RemovedNode.Value);
+                    if (result > 0)
+                    {
+                        ParentNode.Left = RemovedNode.Right;
+                    }
+                    else
+                    {
+                        ParentNode.Right = RemovedNode.Right;
+                    }
+                  
+                }
+            }
+
+            //case 3: Removed Node's right node has left child, then removednode's right child's left most child replaces removed node.
+            else {
+                //find Right's left most child.
+                var leftMost = RemovedNode.Right.Left;
+                var leftMostParent = RemovedNode.Right;
+                while (leftMost != null)
+                {
+                    
+                    leftMost = leftMost.Left;
+                    leftMostParent = leftMost;
+                }
+
+                //leftmostparent's left subtree=left most right subtree. as left most is moved
+
+                leftMostParent.Left = leftMost.Right;
+
+                leftMost.Left = RemovedNode.Left;
+                leftMost.Right = RemovedNode.Right;
+                if (ParentNode == null)
+                {
+                    Head = leftMost;
+                }
+
+                else {
+                    int result = ParentNode.CompareTo(RemovedNode.Value);
+                    if (result < 0)
+                    {
+                        ParentNode.Left = leftMost;
+                    }
+                    else
+                    {
+                        ParentNode.Right = leftMost;
+                    }
+
+                }
+            }
+            _count--;
+            return true;
+        }
+    }
     class Program
     {
-        
+
         static void Main(string[] args)
         {
+
+            Console.WriteLine("Binary Tree starts");
+            Console.WriteLine("-------------------");
+            Console.ReadKey();
+            BinaryTree<int> binaryTree = new BinaryTree<int>();
+            binaryTree.Add(4);
+            binaryTree.Add(5);
+            binaryTree.Add(6);
+            binaryTree.Add(8);
+            binaryTree.Add(3);
+            binaryTree.Add(2);
+            binaryTree.Remove(6);
+            var a = binaryTree.Contains(8);
+            Console.ReadLine();
+
+            /*
             string s = "[\r\n{\r\n                name: \"san1\",\r\nvalue: \"dds1\",\r\nplace:\"hyd\"\r\n},\r\n{\r\n                name: \"san1\",\r\nvalue: \"dds2\",\r\nplace:\"ban\"\r\n},\r\n{\r\n                name: \"san3\",\r\nvalue: \"dds3\",\r\nplace:\"bel\"\r\n},\r\n{\r\n                name: \"san4\",\r\nvalue: \"dds4\",\r\nplace:\"mos\"\r\n}]";
             JArray jArray = JArray.Parse(s);
 
@@ -726,10 +911,36 @@ namespace algorithms
 
 
             sanlookup _sanlookup = new sanlookup();
+            var i = 10;
+            Stopwatch stop = new Stopwatch();
+            stop.Start();
+            for(int j=0;j<i;j++)
             foreach (var x in jArray)
             {
                 _sanlookup.Add(x["name"].ToString(), new KeyValuePair<string, string>(x["value"].ToString(), x["place"].ToString()));
             }
+            stop.Stop();
+            Stopwatch st2 = new Stopwatch();
+
+         
+            st2.Start();
+            ILookup<string, KeyValuePair<string, string>> vsl;
+            for (int j = 0; j < i; j++)
+           vsl =    jArray.ToLookup(a => a["name"].ToString(), b => new KeyValuePair<string, string>(b["value"].ToString(), b["place"].ToString()));
+            st2.Stop();
+
+            Stopwatch st3 = new Stopwatch();
+            HashSet<Dictionary<string, KeyValuePair<string, string>>> dsk=new HashSet<Dictionary<string, KeyValuePair<string, string>>>();
+            st3.Start();
+            for (int j = 0; j < i; j++)
+                foreach (var x in jArray)
+            {
+                    dsk.Add(new Dictionary<string, KeyValuePair<string, string>>() { { x["name"].ToString(), new KeyValuePair<string,string>(x["place"].ToString(), x["value"].ToString()) } });
+            }
+            st3.Stop();
+
+
+
             var f=_sanlookup["san1"];
           HashSet<JObject> tsh = new HashSet<JObject>();
             
@@ -752,11 +963,11 @@ namespace algorithms
                 int N = Convert.ToInt32(vsd[0]);
                 int K = Convert.ToInt32(vsd[1]);
             }
-               
-            
 
-                
-               
+
+            */
+
+
 
             PriorityQueue<int> priorityQueue = new PriorityQueue<int>();
             priorityQueue.Enqueue(5);
@@ -764,6 +975,7 @@ namespace algorithms
             priorityQueue.Enqueue(2);
             priorityQueue.Enqueue(7);
             var firstval = priorityQueue.Dequeue();
+
 
 
             Queue_array<int> testqueue = new Queue_array<int>();
@@ -778,6 +990,10 @@ namespace algorithms
             testqueue.Enqueue(13);
             testqueue.Enqueue(15);
             Console.ReadLine();
+            testqueue.Enqueue(16);
+            testqueue.Enqueue(17);
+            testqueue.Enqueue(18);
+            testqueue.Enqueue(19);
             //LinkedList<int> vs = new LinkedList<int>();
             //vs.Add(3);
             //vs.Add(4);
