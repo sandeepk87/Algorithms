@@ -876,16 +876,92 @@ namespace algorithms
             _count--;
             return true;
         }
+
+
+        public void PreOrderTraversal(Action<T> action)
+        {
+            PreOrderTraversal(action, Head);
+        }
+
+        private void PreOrderTraversal(Action<T> action, TreeNode<T> node)
+        {
+            if (node != null)
+            {
+                action(node.Value);
+                PreOrderTraversal(action,node.Left);
+                PreOrderTraversal(action,node.Right);
+            }
+        }
+
+        public void PostOrderTraversal(Action<T> action)
+        {
+            var node = Head;
+            PostOrderTraversal(action, node);   
+        }
+        private void PostOrderTraversal(Action<T> action, TreeNode<T> treeNode)
+        {
+            if (treeNode != null)
+            {
+                PostOrderTraversal(action, treeNode.Left);
+                PostOrderTraversal(action, treeNode.Right);
+                action(treeNode.Value);
+            }
+        }
+        public IEnumerable<T> PreOrderTraverse()
+        {
+            var current = Head;
+            Stack<TreeNode<T>> node_stack = new Stack<TreeNode<T>>();
+            node_stack.Push(Head);
+            while (current != null)
+            {
+
+                if (!node_stack.Contains(current))
+                {
+
+                   // yield return current.Value;
+                    node_stack.Push(current);
+                }
+                
+              
+               
+                if (current.Left != null&& (!node_stack.Contains(current.Left)))
+                {
+
+                    current = current.Left;
+
+                }
+                else if (current.Right!=null&&(!node_stack.Contains(current.Left)))
+                {
+                    current=current.Right;
+
+                }
+                else
+                {
+                    
+                    current = node_stack.Peek();
+                }
+            }
+
+            while (node_stack.Any())
+            {
+                var currentnew = node_stack.Pop();
+                yield return currentnew.Value;
+            }
+        }
     }
     class Program
     {
-
+        public static void Test(int x)
+        {
+            Console.WriteLine(x);
+        }
         static void Main(string[] args)
         {
 
             Console.WriteLine("Binary Tree starts");
             Console.WriteLine("-------------------");
             Console.ReadKey();
+
             BinaryTree<int> binaryTree = new BinaryTree<int>();
             binaryTree.Add(4);
             binaryTree.Add(5);
@@ -894,7 +970,16 @@ namespace algorithms
             binaryTree.Add(3);
             binaryTree.Add(2);
             binaryTree.Remove(6);
+            binaryTree.Add(7);
+            binaryTree.Add(12);
             var a = binaryTree.Contains(8);
+            List<int> tests = new List<int>();
+            tests.Add(1);
+            tests.Add(4);
+     
+           binaryTree.PreOrderTraversal(Test);
+
+       var oupt=     binaryTree.PreOrderTraverse().ToList();
             Console.ReadLine();
 
             /*
