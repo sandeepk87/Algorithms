@@ -911,42 +911,27 @@ namespace algorithms
         {
             var current = Head;
             Stack<TreeNode<T>> node_stack = new Stack<TreeNode<T>>();
-            node_stack.Push(Head);
-            while (current != null)
+          node_stack.Push(current);
+            while (node_stack.Count >0)
             {
-
-                if (!node_stack.Contains(current))
-                {
-
-                   // yield return current.Value;
-                    node_stack.Push(current);
-                }
+                current = node_stack.Pop();
+                yield return current.Value;
                 
-              
-               
-                if (current.Left != null&& (!node_stack.Contains(current.Left)))
-                {
-
-                    current = current.Left;
-
-                }
-                else if (current.Right!=null&&(!node_stack.Contains(current.Left)))
-                {
-                    current=current.Right;
-
-                }
-                else
+                if (current.Right != null)
                 {
                     
-                    current = node_stack.Peek();
-                }
-            }
+                    node_stack.Push(current.Right);
 
-            while (node_stack.Any())
-            {
-                var currentnew = node_stack.Pop();
-                yield return currentnew.Value;
+                }
+                   if(current.Left!=null)
+                {
+                   
+                    node_stack.Push(current.Left);
+                }
+
+                
             }
+            
         }
     }
     class Program
@@ -960,7 +945,7 @@ namespace algorithms
 
             Console.WriteLine("Binary Tree starts");
             Console.WriteLine("-------------------");
-            Console.ReadKey();
+            //Console.ReadKey();
 
             BinaryTree<int> binaryTree = new BinaryTree<int>();
             binaryTree.Add(4);
