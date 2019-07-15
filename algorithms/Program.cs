@@ -812,7 +812,7 @@ namespace algorithms
                 }
             }
             //case 2: RemovedNodes'right node has no left child, then removednode's right child replaces removednode.
-            if (RemovedNode.Right.Left == null)
+           else if (RemovedNode.Right.Left == null)
             {
                 RemovedNode.Right.Left = RemovedNode.Left;
 
@@ -914,6 +914,8 @@ namespace algorithms
           node_stack.Push(current);
             while (node_stack.Count >0)
             {
+                //first pop and return existing value in stack
+                //then push left and right value onto stack then repeat same
                 current = node_stack.Pop();
                 yield return current.Value;
                 
@@ -933,11 +935,87 @@ namespace algorithms
             }
             
         }
+
+
+        public IEnumerable<T> PostOrderTraverse()
+        {
+            TreeNode<T> current = Head;
+            Stack<TreeNode<T>> node_stack = new Stack<TreeNode<T>>();
+            node_stack.Push(current);
+
+            ////if (current.Right != null)
+            ////{
+            ////    node_stack.Push(current.Right);
+            ////    node_stack.Push(current);
+            ////    current = current.Left;
+            ////}
+              
+            //first reach the left most node and display it
+            //then check
+
+            bool ascend = true;
+            var last = current;
+            
+            while (node_stack.Any())
+            {
+                if (current == null)
+                {
+                    last = node_stack.Peek();
+                    
+                    node_stack.Pop();
+
+
+                    if (last.Right == null)
+                    {
+
+                        yield return last.Value;
+                        current = null;
+                    }
+
+                    else
+                    {
+                        if (node_stack.Count < 1)
+                            break;
+                        if (last.Right == node_stack.Peek())
+                        {
+                            node_stack.Pop();
+                            node_stack.Push(last);
+                            current = last.Right;
+
+                        }
+                        else
+                        {
+                            yield return last.Value;
+                            
+                        }
+
+                    }
+                }
+
+
+              else  if (current.Right != null)
+                {
+                    node_stack.Push(current.Right);
+                    node_stack.Push(current);
+                    current = current == null ? null : current.Left;
+                }
+                else 
+                {
+                    node_stack.Push(current);
+                    current = current == null ? null : current.Left;
+                }
+
+                
+            }
+
+        }
     }
     class Program
     {
+       
         public static void Test(int x)
         {
+          
             Console.WriteLine(x);
         }
         static void Main(string[] args)
@@ -948,24 +1026,46 @@ namespace algorithms
             //Console.ReadKey();
 
             BinaryTree<int> binaryTree = new BinaryTree<int>();
+            binaryTree.Add(10);
+
+
+            binaryTree.Add(7);
             binaryTree.Add(4);
-            binaryTree.Add(5);
-            binaryTree.Add(6);
+
             binaryTree.Add(8);
             binaryTree.Add(3);
-            binaryTree.Add(2);
-            binaryTree.Remove(6);
-            binaryTree.Add(7);
+            binaryTree.Add(5);
+            
+            binaryTree.Add(6);
+            binaryTree.Add(9);
+            binaryTree.Add(1);
+           
+            binaryTree.Remove(9);
+            binaryTree.Add(17);
+            binaryTree.Add(14);
+            binaryTree.Add(24);
+
             binaryTree.Add(12);
+            binaryTree.Add(16);
+            binaryTree.Add(20);
+            binaryTree.Add(30);
+            binaryTree.Add(13);
             var a = binaryTree.Contains(8);
             List<int> tests = new List<int>();
+            var ff=binaryTree.Contains(6);
             tests.Add(1);
             tests.Add(4);
-     
+            binaryTree.PostOrderTraversal(Test);
+            var ss=binaryTree.PostOrderTraverse().ToList();
            binaryTree.PreOrderTraversal(Test);
-
+            
        var oupt=     binaryTree.PreOrderTraverse().ToList();
-            Console.ReadLine();
+            binaryTree.PostOrderTraversal(Test);
+            Console.WriteLine()
+                ;
+
+            
+
 
             /*
             string s = "[\r\n{\r\n                name: \"san1\",\r\nvalue: \"dds1\",\r\nplace:\"hyd\"\r\n},\r\n{\r\n                name: \"san1\",\r\nvalue: \"dds2\",\r\nplace:\"ban\"\r\n},\r\n{\r\n                name: \"san3\",\r\nvalue: \"dds3\",\r\nplace:\"bel\"\r\n},\r\n{\r\n                name: \"san4\",\r\nvalue: \"dds4\",\r\nplace:\"mos\"\r\n}]";
