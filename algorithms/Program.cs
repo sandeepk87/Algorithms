@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace algorithms
 {
@@ -782,12 +783,14 @@ namespace algorithms
 
         public bool Remove(T value)
         {
-            if (!Contains(value))
-                return false;
+           
             
                 TreeNode<T> ParentNode = null;
                 TreeNode<T> RemovedNode = FindWithParent(value,out ParentNode);
-
+            if (RemovedNode == null)
+            {
+                return false;
+            }
               //case 1: Removed Node has no right child, means current node is replaced by left node.
             if(RemovedNode.Right==null)
             {
@@ -1020,8 +1023,55 @@ namespace algorithms
         }
         static void Main(string[] args)
         {
+            Console.WriteLine("Insertion Sort:Enter input numbers");
+            var input=Console.ReadLine();
+            string[] strinputs=input.Split(new string[]{" "},StringSplitOptions.RemoveEmptyEntries);
+           int[] inputs =strinputs.Select(each=>Convert.ToInt32(each)).ToArray();
+            Console.WriteLine("The input elements are");
+            foreach(var element in inputs){Console.WriteLine(element);}
+//selection sort
+int testtemp;
+ for (int i =0;i<inputs.Length-1;i++)
+ {
+     var min =i;
+     for(int j=i+1;j<inputs.Length;j++)
+     {
+         if(inputs[min] > inputs[j])
+         min = j;
+     }
+    //make input[i] = minimum;
+    testtemp=inputs[i];
+    inputs[i]=inputs[min];
+    inputs[min]=testtemp;
+
+     
+     
+ }
+
+
+//insertion sort
+             int temp=0;
+             for(int d=1;d<inputs.Length;d++)
+             {
+               int e = d-1; 
+               temp=inputs[e];               
+               while(e>=0 && inputs[e]>temp)
+                 {                               
+                   inputs[e+1]=inputs[e];
+                   e--;
+                 }     
+                 inputs[e+1]=temp;                             
+             }
+             Console.WriteLine("Sorted Elements are:");
+             foreach(var s in inputs)
+             {
+                 Console.WriteLine(s);
+             }
+
+             
 
             Console.WriteLine("Binary Tree starts");
+           var samplecheck=Console.ReadLine();
             Console.WriteLine("-------------------");
             //Console.ReadKey();
 
