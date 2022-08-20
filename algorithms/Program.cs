@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 using System.Diagnostics;
+using algorithms.CodingProblems;
+using algorithms.CodingProblems.Sorting;
 
 namespace algorithms
 {
@@ -224,6 +226,25 @@ namespace algorithms
 
                 }
             }
+        }
+
+        public void Reverse() {
+
+            LinkedListNode<T> current = Head;
+          
+            var currentHead = Head;
+            LinkedListNode<T> prev = null;
+            LinkedListNode<T> next = null;
+            while(current != null)
+            {
+                next = current.Next;
+                current.Next = prev;
+                prev = current;
+                current = next;
+            }
+            Head = prev;
+            Tail = currentHead;
+        
         }
 
         public bool Remove(T item)
@@ -1021,6 +1042,56 @@ namespace algorithms
         static void Main(string[] args)
         {
 
+            var inputnumbers = new int[] { 2, 45, 10, 5, 7, 3 ,8,1};
+
+            var sorted = RandomQuickSort.Sort(inputnumbers);
+
+             sorted = QuickSort.Sort(inputnumbers);
+
+             sorted = MergeSort.Sort(inputnumbers);
+            foreach(var val in sorted)
+            {
+                Console.WriteLine(val);
+            }
+
+
+            var decodeStringCreator = DecodeString.DecodeStr("3[a2[c]]");
+            Console.WriteLine(decodeStringCreator);
+
+            var decodeStringCreator2 = DecodeString.Decode("12[abb]");
+            Console.WriteLine(decodeStringCreator);
+
+            Console.WriteLine("----Simple LInked List");
+            LinkedList<int> vs = new LinkedList<int>();
+            vs.Add(3);
+            vs.Add(4);
+            vs.Add(6);
+            vs.Add(7);
+            foreach (var i in vs)
+            {
+                Console.WriteLine(i);
+            }
+            //  vs.Remove(7);
+
+
+            Console.WriteLine("Reversed List");
+            vs.Reverse();
+
+            foreach (var i in vs)
+            {
+                Console.WriteLine(i);
+            }
+
+
+            Console.WriteLine("Double Linked List");
+
+            DoublyLinkedList<int> ds = new DoublyLinkedList<int>();
+            ds.Add(1);
+            ds.Add(4);
+            ds.Add(5);
+            ds.Remove(4);
+
+
             Console.WriteLine("Binary Tree starts");
             Console.WriteLine("-------------------");
             //Console.ReadKey();
@@ -1164,22 +1235,7 @@ namespace algorithms
             testqueue.Enqueue(17);
             testqueue.Enqueue(18);
             testqueue.Enqueue(19);
-            //LinkedList<int> vs = new LinkedList<int>();
-            //vs.Add(3);
-            //vs.Add(4);
-            //vs.Add(6);
-            //vs.Add(7);
-            //foreach (var i in vs)
-            //{
-            //    Console.WriteLine(i);
-            //}
-            //vs.Remove(7);
-
-            //DoublyLinkedList<int> ds = new DoublyLinkedList<int>();
-            //ds.Add(1);
-            //ds.Add(4);
-            //ds.Add(5);
-            //ds.Remove(4);
+       
 
 
             //Stack_Array<int> st = new Stack_Array<int>();
