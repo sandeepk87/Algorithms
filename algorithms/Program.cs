@@ -932,7 +932,7 @@ namespace algorithms
         {
             var current = Head;
             Stack<TreeNode<T>> node_stack = new Stack<TreeNode<T>>();
-          node_stack.Push(current);
+             node_stack.Push(current);
             while (node_stack.Count >0)
             {
                 //first pop and return existing value in stack
@@ -1041,6 +1041,65 @@ namespace algorithms
         }
         static void Main(string[] args)
         {
+            //UndirectedGraph 
+
+            DataStructures.UndirectedGraphStringExample undirectedGraph = new DataStructures.UndirectedGraphStringExample();
+            undirectedGraph.DepthFirstTraversal_Stack(undirectedGraph.Undirected_Graph,"i");
+
+            undirectedGraph.DepthFirstTraversal_Recursive(undirectedGraph.Undirected_Graph, "i");
+
+            Console.WriteLine($"ConnectedComponents count is {undirectedGraph.ConnectedComponentCount()}");
+
+            Console.WriteLine($"largerst component is {undirectedGraph.LargestConponent()}");
+
+            Console.WriteLine($"Shortest path between i and m is {undirectedGraph.ShortestPath("i", "m")}");
+
+
+            Console.WriteLine($"Island Count is {CodingProblems.Island.GetCount()}");
+
+
+            Console.WriteLine($"Minimum Island Size is {Island.MinimumIsland()}");
+
+            //DirectedGraph
+
+                var graph = new DataStructures.GraphNodeStringExample();
+
+            DataStructures.GraphOperations.DepthFirstTraversal(graph.a);
+            DataStructures.GraphOperations.DepthFirstTraversalRecursive(graph.a);
+            DataStructures.GraphOperations.BreadthFirstTraversal(graph.a);
+
+
+            Console.WriteLine("has path b to e" + DataStructures.GraphOperations.HasPath(graph.b, graph.e));
+            Console.WriteLine("has path a to e" + DataStructures.GraphOperations.HasPath(graph.a, graph.e));
+            Console.WriteLine("has path a to f" + DataStructures.GraphOperations.HasPath(graph.a, graph.f));
+
+
+            Console.WriteLine("has path c to f" + DataStructures.GraphOperations.HasPath(graph.c, graph.f));
+
+
+            //Binary Tree;
+
+            var inttree = new DataStructures.BinaryTreeIntExample();
+            Console.WriteLine(inttree.TreeSum(inttree.Root));
+
+
+            var maxRootPathSum = inttree.MaxRootLeafPathSum(inttree.Root);
+
+            Console.WriteLine($"Maximum Sum For Root To Leaf path is {maxRootPathSum}");
+
+            Console.WriteLine($"Tree Min With Recursion {inttree.TreeMin(inttree.Root)}");
+            Console.WriteLine($"Tree Min With DepthFirst {inttree.TreeMin_DepthFirstStack(inttree.Root)}");
+            Console.WriteLine($"Tree Min With BreadthFirst {inttree.TreeMin_BreadthFirstQueue(inttree.Root)}");
+
+            DataStructures.BinaryTreeExample binaryTree1 = new DataStructures.BinaryTreeExample();
+
+            binaryTree1.Print_BreadthFirstPreOrder_WithQueue();
+
+            binaryTree1.Print_DepthFirstPreOrder_WithStack();
+
+            binaryTree1.Print_DepthFirstPreOrder_WithRecursion(binaryTree1.Head);
+
+
 
             var inputnumbers = new int[] { 2, 45, 10, 5, 7, 3 ,8,1};
 
